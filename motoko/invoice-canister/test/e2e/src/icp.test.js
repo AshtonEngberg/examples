@@ -259,6 +259,21 @@ describe("ICP Tests", () => {
         },
       });
     });
+    it("should return an error if amount to transfer is less than the transfer fee cost", async () => {
+      let transferResult = await balanceHolder.transfer({
+        amount: (10000n-1n),
+        destinationAddress: "d9e7a24235e4d6712c44303a909d2ba3d7c61163fcb5731c8a0741ad48f7dc0d",
+        token: {
+          symbol: "ICP",
+        }
+      });
+      expect(transferResult).toStrictEqual({
+        err: {
+          kind: { InsufficientTransferAmount: null },
+          message: ["Amount specified to transfer is not enough to cover cost of transfer fee"],
+        },
+      });
+    });
     it("should not allow a caller to transfer more than their balance", async () => {
       let transferResult = await defaultActor.transfer({
         amount: 1000000n,

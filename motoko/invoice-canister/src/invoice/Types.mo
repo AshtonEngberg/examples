@@ -149,6 +149,7 @@ module {
     kind : {
       #BadFee;
       #InsufficientFunds;
+      #InsufficientTransferAmount;
       #InvalidToken;
       #InvalidDestination;
       #Other;

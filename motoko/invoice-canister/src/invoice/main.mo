@@ -345,7 +345,13 @@ shared ({ caller = installer_ }) actor class Invoice(delegatedAdminstrator : ?Pr
     switch (args.token.symbol) {
       case "ICP" {
         switch (ICPUtils.accountIdentifierFromValidText(args.destinationAddress)) {
-          case (#ok accountIdentifer) {
+          case (#ok accountIdentifer) {   
+            if (Nat64.less(Nat64.fromNat(args.amount), 10000)) {
+              return #err({
+                  kind = #InsufficientTransferAmount;
+                  message = ?"Amount specified to transfer is not enough to cover cost of transfer fee";
+              });
+            };
             let transferResult = await ICP.transfer({
               memo = 0;
               fee = { e8s = 10000 };
