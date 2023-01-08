@@ -17,30 +17,36 @@ import Result "mo:base/Result";
 
 //dfx deploy invoice --argument '( opt principal"jg6qm-uw64t-m6ppo-oluwn-ogr5j-dc5pm-lgy2p-eh6px-hebcd-5v73i-nqe"  )'
 shared ({ caller = installer_ }) actor class Invoice(delegatedAdminstrator : ?Principal) = this {
+
   // #region Types
   type Details = T.Details;
   type Token = T.Token;
   type TokenVerbose = T.TokenVerbose;
   type Invoice = T.Invoice;
-  // #endregion
+
+  type SpecificInvoicePermission = {
+    #Get;
+    #Verify;
+  };
 
   let errInvalidToken = #err({
     message = ?"This token is not yet supported. Currently, this canister supports ICP.";
     kind = #InvalidToken;
   });
+  // #endregion
 
   /**
 * Application State
 */
 
   // #region State
-  // if specified when deployed also has the ability to add/remove from creators allow list and transfer from any subaccount 
-  let delegatedAdmin_ = Option.get(delegatedAdminstrator, installer_);
-  stable var creatorsAllowedList: [Principal] = [];
   stable var entries : [(Nat, Invoice)] = [];
   stable var invoiceCounter : Nat = 0;
   let invoices : HashMap.HashMap<Nat, Invoice> = HashMap.fromIter(Iter.fromArray(entries), entries.size(), Nat.equal, Hash.hash);
   entries := [];
+  // if specified when deployed also has the ability to add/remove from creators allow list
+  let delegatedAdmin_ = Option.get(delegatedAdminstrator, installer_);
+  stable var creatorsAllowedList: [Principal] = [];
 
   // Magic Numbers
   let SMALL_CONTENT_SIZE = 256;
@@ -48,8 +54,8 @@ shared ({ caller = installer_ }) actor class Invoice(delegatedAdminstrator : ?Pr
   let MAX_INVOICES = 30_000;
   let MAX_INVOICE_CREATORS = 256;
   let MINIMUM_BILLABLE_AMOUNT = 2 * 10_000;
-
   // #endregion
+
   /**
 * Application Interface
 */
@@ -129,7 +135,7 @@ shared ({ caller = installer_ }) actor class Invoice(delegatedAdminstrator : ?Pr
       Array.find<Principal>(creatorsAllowedList, func (x : Principal) { x == who; }))
   }; 
   // #endregion 
-
+  
   // #region Create Invoice
   public shared ({ caller }) func create_invoice(args : T.CreateInvoiceArgs) : async T.CreateInvoiceResult {
 
@@ -234,41 +240,20 @@ shared ({ caller = installer_ }) actor class Invoice(delegatedAdminstrator : ?Pr
     let invoice = invoices.get(args.id);
     switch invoice {
       case null {
-        #err({
+        return #err({
           message = ?"Invoice not found";
           kind = #NotFound;
         });
       };
       case (?i) {
-        if (i.creator == caller) {
+        if (hasSpecificInvoicePermission(i, #Get, caller)) {
           return #ok({ invoice = i });
+        } else {
+          return #err({
+            message = ?"You do not have permission to view this invoice";
+            kind = #NotAuthorized;
+          });
         };
-        // If additional permissions are provided
-        switch (i.permissions) {
-          case (null) {
-            return #err({
-              message = ?"You do not have permission to view this invoice";
-              kind = #NotAuthorized;
-            });
-          };
-          case (?permissions) {
-            let hasPermission = Array.find<Principal>(
-              permissions.canGet,
-              func(x : Principal) : Bool {
-                return x == caller;
-              },
-            );
-            if (Option.isSome(hasPermission)) {
-              return #ok({ invoice = i });
-            } else {
-              return #err({
-                message = ?"You do not have permission to view this invoice";
-                kind = #NotAuthorized;
-              });
-            };
-          };
-        };
-        #ok({ invoice = i });
       };
     };
   };
@@ -312,32 +297,12 @@ shared ({ caller = installer_ }) actor class Invoice(delegatedAdminstrator : ?Pr
         });
       };
       case (?i) {
-        if (i.creator != caller) {
-          switch (i.permissions) {
-            case null {
-              return #err({
-                message = ?"You do not have permission to verify this invoice";
-                kind = #NotAuthorized;
-              });
-            };
-            case (?permissions) {
-              let hasPermission = Array.find<Principal>(
-                permissions.canVerify,
-                func(x : Principal) : Bool {
-                  return x == caller;
-                },
-              );
-              if (Option.isSome(hasPermission)) {
-                // May proceed
-              } else {
-                return #err({
-                  message = ?"You do not have permission to verify this invoice";
-                  kind = #NotAuthorized;
-                });
-              };
-            };
-          };
-        };
+        if (not hasSpecificInvoicePermission(i, #Verify, caller)) {
+          return #err({
+            message = ?"You do not have permission to verify this invoice";
+            kind = #NotAuthorized;
+          });
+        }; // else proceed
 
         // Return if already verified
         if (i.verifiedAtTime != null) {
@@ -473,6 +438,26 @@ shared ({ caller = installer_ }) actor class Invoice(delegatedAdminstrator : ?Pr
       };
     };
   };
+
+  // #region hasSpecificInvoicePermission 
+  func hasSpecificInvoicePermission(invoice: T.Invoice, permission: SpecificInvoicePermission, who: Principal) : Bool {
+    if (invoice.creator == who) {
+      return true;
+    };
+    switch (invoice.permissions) {
+      case null {
+        return false;
+      };
+      case (?permissions) {
+        let allowed = switch (permission) {
+          case (#Get) { permissions.canGet };
+          case (#Verify) { permissions.canVerify };
+        };
+        return Option.isSome(Array.find<Principal>(allowed, func(x : Principal) { x == who } )); 
+      };
+    }
+  };
+  // #endregion
 
   func isAnonymous(p : Principal) : Bool { Blob.equal(Principal.toBlob(p), Blob.fromArray([0x04])) };
   func getInvoiceCanisterPrinciple() : Principal { Principal.fromActor(this) };
