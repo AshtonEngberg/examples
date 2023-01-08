@@ -89,3 +89,5 @@ this is for personal use in case changes have to be redone manually, points aren
     ☀ encapsulate per invoice permission checks to a method (added private variant to specifically use for this private utility method)
   SEC-F27 principalToSubaccount-needs-domain-separator 
     ☀ uncomment code from SEC-F12, update addresses in unit test (1), e2e icp (2) and install script (for balance holder)
+  Issue-35 insufficient transfer amount to cover fee 
+    ☀ add < and new InsufficientTransferAmount error kind to return for transfer 
