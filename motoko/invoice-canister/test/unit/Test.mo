@@ -53,7 +53,7 @@ let success = run([
       }),
       it("should convert an account identifier with a subaccount created from a principal into a human readable form ", do {
         let accountIdText = NewUtils.toHumanReadableForm(NewUtils.toAccountIdentifierAddress(testPrincipal, NewUtils.subaccountForPrincipal(testCaller)));
-        let principalAccount = "333ee20adc61d719820ac133d10f010e531ed8496ffcc439145b3df1982552e7";
+        let principalAccount = "38c19f371129bc81083175ceb2dead51223d13653f3778162948be03e1eef469";
         assertTrue(principalAccount == accountIdText);
       }),
       it("should convert a valid account identifier blob to text", do {

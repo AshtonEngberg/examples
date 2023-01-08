@@ -73,7 +73,7 @@ if (argv.deployWDelegation) {
 await $`dfx identity import invoice-nns-initiallized-icp-funded-identity test/e2e/src/utils/ident-1.pem --disable-encryption`
 await $`dfx identity use invoice-nns-initiallized-icp-funded-identity`
 // note this account identifier corresponds to the balance holder's principal-subaccount of the invoice canister
-await $`dfx ledger transfer 675d3f2043c6bf5d642454cf0890b467673f0bacfd1c85882c0d650d4c6d2abb --icp 1000 --memo 0`
+await $`dfx ledger transfer d9e7a24235e4d6712c44303a909d2ba3d7c61163fcb5731c8a0741ad48f7dc0d --icp 1000 --memo 0`
 await $`dfx identity use default`
 // to keep things clean, dev can always import later if needed
 await $`dfx identity remove invoice-nns-initiallized-icp-funded-identity`

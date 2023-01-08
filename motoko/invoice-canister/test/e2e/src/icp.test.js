@@ -41,6 +41,7 @@ beforeAll(async () => {
       throw new Error("Couldn't add default identity to creators allowed list necessary for testing!")
     }
   } // else ok & can proceed
+
   createResult = await defaultActor.create_invoice(testInvoice);
 });
 
@@ -56,7 +57,7 @@ const resetBalance = async () => {
       // Transfer full balance back to the balance holder
       let result = await defaultActor.transfer({
         amount,
-        destinationAddress: "675d3f2043c6bf5d642454cf0890b467673f0bacfd1c85882c0d650d4c6d2abb",
+        destinationAddress: "d9e7a24235e4d6712c44303a909d2ba3d7c61163fcb5731c8a0741ad48f7dc0d",
         token: {
           symbol: "ICP",
         }
@@ -95,7 +96,7 @@ describe("ICP Tests", () => {
       });
       if ("ok" in identifier) {
         expect(identifier.ok.consolidationAddress).toStrictEqual(
-          "289c5ef2c85f8f6109562f1d175f97d80a4d13aa58f2d2cfaa30f5dc7947ce1d"
+          "513242a516e54307b7a06920d29275201dc536d2e1b892bd83b65a01bacea158"
         );
       } else {
         throw new Error(identifier.err.message);
@@ -261,7 +262,7 @@ describe("ICP Tests", () => {
     it("should not allow a caller to transfer more than their balance", async () => {
       let transferResult = await defaultActor.transfer({
         amount: 1000000n,
-        destinationAddress: "675d3f2043c6bf5d642454cf0890b467673f0bacfd1c85882c0d650d4c6d2abb",
+        destinationAddress: "d9e7a24235e4d6712c44303a909d2ba3d7c61163fcb5731c8a0741ad48f7dc0d",
         token: {
           symbol: "ICP",
         }
