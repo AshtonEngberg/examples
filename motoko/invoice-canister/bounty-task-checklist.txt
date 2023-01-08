@@ -40,7 +40,7 @@ This was created to make it easier for someone to quickly verify everything has 
     https://github.com/dfinity/invoice-canister/issues/35
 
     - Return an error if the requested transfer amount from a principal subaccount is less than the transfer fee 
-        to do ☑️
+        ☑️ check
 }
 {
     ✶ SEC Cleanup 
@@ -68,7 +68,7 @@ This was created to make it easier for someone to quickly verify everything has 
     https://github.com/dfinity/invoice-canister/issues/28
 
     - "For domain separation to be effective, we recommend to also add a domain separator to principalToSubaccount." 
-        ☑️ done
+        ☑️ check
 }
 {
     ✶ SEC-F22 Potentially sensitive invoice details are stored in plain text on the canister  
