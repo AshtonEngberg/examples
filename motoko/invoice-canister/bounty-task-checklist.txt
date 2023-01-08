@@ -30,7 +30,7 @@ This was created to make it easier for someone to quickly verify everything has 
     - Add access control for creating new invoices 
         ☑️ check
     - Refactor permission checks to a method 
-        to do ☑️
+        ☑️ check
     - Fix check account for transfer fee during transfer (during invoice verification)
         ☑️ check (pull request 356)
 }
