@@ -47,10 +47,11 @@ module {
 */
   public func subaccountForPrincipal(p : Principal) : Blob {
     let hash = SHA224.New();
-    /* adding this resolves SEC-F27 TODO future commit
+    // Length of domain separator
     hash.write([0x0A]);
+    // Domain separator
     hash.write(Blob.toArray(Text.encodeUtf8("creator-id"))); 
-    */
+    // Principal of caller
     hash.write(Blob.toArray(Principal.toBlob(p)));
     let hashSum = hash.sum([]);
     let crc32bytes = Binary.BigEndian.fromNat32(CRC32.checksum(hashSum));
