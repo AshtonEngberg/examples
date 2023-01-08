@@ -87,3 +87,5 @@ this is for personal use in case changes have to be redone manually, points aren
       - update maxCapacity.js to include check for maxing out creators invoice list capacity 
   "refactor permission checks to a method" (subtask of invoice canister cleanup, complete and all working tests @ commit hash c335513c0cc0e3121ddccbfcac1cb09924e95fa2)
     ☀ encapsulate per invoice permission checks to a method (added private variant to specifically use for this private utility method)
+  SEC-F27 principalToSubaccount-needs-domain-separator 
+    ☀ uncomment code from SEC-F12, update addresses in unit test (1), e2e icp (2) and install script (for balance holder)
