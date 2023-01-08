@@ -85,3 +85,5 @@ this is for personal use in case changes have to be redone manually, points aren
         * add test for checking unauthorized callers can't create invoices 
       - update icp.test.js to add beforeall to make sure defaultActor has permission to create and edit which it tests' titles to designate it is of invoice's  permission 
       - update maxCapacity.js to include check for maxing out creators invoice list capacity 
+  "refactor permission checks to a method" (subtask of invoice canister cleanup, complete and all working tests @ commit hash c335513c0cc0e3121ddccbfcac1cb09924e95fa2)
+    ☀ encapsulate per invoice permission checks to a method (added private variant to specifically use for this private utility method)
