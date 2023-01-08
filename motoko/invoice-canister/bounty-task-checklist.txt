@@ -68,7 +68,7 @@ This was created to make it easier for someone to quickly verify everything has 
     https://github.com/dfinity/invoice-canister/issues/28
 
     - "For domain separation to be effective, we recommend to also add a domain separator to principalToSubaccount." 
-        to do ☑️ (partial check, needs to be uncommented from change with sec-f12)
+        ☑️ done
 }
 {
     ✶ SEC-F22 Potentially sensitive invoice details are stored in plain text on the canister  
@@ -136,7 +136,7 @@ This was created to make it easier for someone to quickly verify everything has 
 
     - There needs to be better access control for how the authority over the invoice canister is defined. Specifically this topic needs to be discussed in documentation as well as there could be a creation allow list allowing delegation of invoice creation and processing. 
         ( The context of this issue was as if the invoice canister would become applied for use by a DAO, however that's a project in itself. To prepare for such a possibility, more access control could be introduced: admin level role who can add and remove principals from invoice creation allow list, as well as move funds from any subaccount, and a consolidation account role, which currently will be mapping invoices to their creators so they can only move funds from their own accounts)
-        to do ☑️
+        ☑️ done
 }
 {
     ✶ Support for the ICRC-1 fungible token standard
