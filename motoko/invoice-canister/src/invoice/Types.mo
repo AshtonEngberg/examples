@@ -99,6 +99,7 @@ module {
     message : ?Text;
     kind : {
       #InvalidToken;
+      #NotAuthorized;
       #NotFound;
       #Other;
     };
@@ -152,6 +153,7 @@ module {
       #InsufficientTransferAmount;
       #InvalidToken;
       #InvalidDestination;
+      #NotAuthorized;
       #Other;
     };
   };
@@ -169,6 +171,7 @@ module {
     message : ?Text;
     kind : {
       #InvalidToken;
+      #NotAuthorized;
       #Other;
     };
   };
