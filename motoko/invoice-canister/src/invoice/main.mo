@@ -17,7 +17,7 @@ import Result "mo:base/Result";
 
 //dfx deploy invoice --argument '( opt principal"jg6qm-uw64t-m6ppo-oluwn-ogr5j-dc5pm-lgy2p-eh6px-hebcd-5v73i-nqe"  )'
 shared ({ caller = installer_ }) actor class Invoice(delegatedAdminstrator : ?Principal) = this {
-
+    
   // #region Types
   type Details = T.Details;
   type Token = T.Token;
@@ -33,20 +33,22 @@ shared ({ caller = installer_ }) actor class Invoice(delegatedAdminstrator : ?Pr
     message = ?"This token is not yet supported. Currently, this canister supports ICP.";
     kind = #InvalidToken;
   });
+
   // #endregion
 
   /**
 * Application State
 */
-
+ 
   // #region State
   stable var entries : [(Nat, Invoice)] = [];
   stable var invoiceCounter : Nat = 0;
   let invoices : HashMap.HashMap<Nat, Invoice> = HashMap.fromIter(Iter.fromArray(entries), entries.size(), Nat.equal, Hash.hash);
   entries := [];
-  // if specified when deployed also has the ability to add/remove from creators allow list
-  let delegatedAdmin_ = Option.get(delegatedAdminstrator, installer_);
+
   stable var creatorsAllowedList: [Principal] = [];
+  // if specified when deployed also has the ability to add/remove from creators allow list
+  let delegatedAdmin_ : Principal = Option.get(delegatedAdminstrator, installer_);
 
   // Magic Numbers
   let SMALL_CONTENT_SIZE = 256;
@@ -64,7 +66,7 @@ shared ({ caller = installer_ }) actor class Invoice(delegatedAdminstrator : ?Pr
   public shared ({ caller }) func add_allowed_creator(args : T.AddAllowedCreatorArgs) : async T.AddAllowedCreatorResult {
     if (creatorsAllowedList.size() < MAX_INVOICE_CREATORS) {
       if (caller == installer_ or caller == delegatedAdmin_) {
-        if (isAnonymous(args.who)) {
+        if (Principal.isAnonymous(args.who)) {
           return #err({
             message = ?"The anonymous caller is not elgible to be on the creators allowed list.";
             kind = #AnonymousIneligible;
@@ -135,7 +137,7 @@ shared ({ caller = installer_ }) actor class Invoice(delegatedAdminstrator : ?Pr
       Array.find<Principal>(creatorsAllowedList, func (x : Principal) { x == who; }))
   }; 
   // #endregion 
-  
+
   // #region Create Invoice
   public shared ({ caller }) func create_invoice(args : T.CreateInvoiceArgs) : async T.CreateInvoiceResult {
 
@@ -237,6 +239,8 @@ shared ({ caller = installer_ }) actor class Invoice(delegatedAdminstrator : ?Pr
 
   // #region Get Invoice
   public shared query ({ caller }) func get_invoice(args : T.GetInvoiceArgs) : async T.GetInvoiceResult {
+    if (Principal.isAnonymous(caller)) return #err({ message = null; kind = #NotAuthorized; });
+
     let invoice = invoices.get(args.id);
     switch invoice {
       case null {
@@ -261,6 +265,8 @@ shared ({ caller = installer_ }) actor class Invoice(delegatedAdminstrator : ?Pr
 
   // #region Get Balance
   public shared ({ caller }) func get_balance(args : T.GetBalanceArgs) : async T.GetBalanceResult {
+    if (Principal.isAnonymous(caller)) return #err({ message = null; kind = #NotAuthorized; });
+
     let token = args.token;
     switch (token.symbol) {
       case "ICP" {
@@ -289,6 +295,8 @@ shared ({ caller = installer_ }) actor class Invoice(delegatedAdminstrator : ?Pr
 
   // #region Verify Invoice
   public shared ({ caller }) func verify_invoice(args : T.VerifyInvoiceArgs) : async T.VerifyInvoiceResult {
+    if (Principal.isAnonymous(caller)) return #err({ message = null; kind = #NotAuthorized; });
+
     switch (invoices.get(args.id)) {
       case null {
         return #err({
@@ -342,6 +350,8 @@ shared ({ caller = installer_ }) actor class Invoice(delegatedAdminstrator : ?Pr
 
   // #region Transfer
   public shared ({ caller }) func transfer(args : T.TransferArgs) : async T.TransferResult {
+    if (Principal.isAnonymous(caller)) return #err({ message = null; kind = #NotAuthorized; });
+
     switch (args.token.symbol) {
       case "ICP" {
         switch (ICPUtils.accountIdentifierFromValidText(args.destinationAddress)) {
@@ -399,6 +409,8 @@ shared ({ caller = installer_ }) actor class Invoice(delegatedAdminstrator : ?Pr
     * Returns the human readable address of the caller's consolidation subaccount for the specified token
     */
   public shared ({ caller }) func get_callers_consolidation_address(args : T.GetCallersConsolidationAddressArgs) : async T.GetCallersConsolidationAddressResult {
+    if (Principal.isAnonymous(caller)) return #err({ message = null; kind = #NotAuthorized; });
+
     switch (args.token.symbol) {
       case "ICP" {
         let principalSubaccountAddress = ICPUtils.toHumanReadableForm(
@@ -465,7 +477,6 @@ shared ({ caller = installer_ }) actor class Invoice(delegatedAdminstrator : ?Pr
   };
   // #endregion
 
-  func isAnonymous(p : Principal) : Bool { Blob.equal(Principal.toBlob(p), Blob.fromArray([0x04])) };
   func getInvoiceCanisterPrinciple() : Principal { Principal.fromActor(this) };
   // #endregion
 
