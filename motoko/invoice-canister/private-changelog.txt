@@ -91,3 +91,7 @@ this is for personal use in case changes have to be redone manually, points aren
     ☀ uncomment code from SEC-F12, update addresses in unit test (1), e2e icp (2) and install script (for balance holder)
   Issue-35 insufficient transfer amount to cover fee 
     ☀ add < and new InsufficientTransferAmount error kind to return for transfer 
+  SEC-F21 disallow anonymous principal 
+    ☀ convert delegatedAdmin to var with getter/setter instead of as a let field set by class constructor arg 
+    ☀ add anti-anon check to beginning of get_allowed_creators_list, add_allowed_creator, remove_allowed_creator, get_balance, get_callers_consolidation_address, verify_invoice transfer (create_invoice already checks)
+    ☀ add test suites to verify above (delegatedAdmin, disallowAnon)
