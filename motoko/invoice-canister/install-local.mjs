@@ -16,7 +16,7 @@ import { spawnSync } from "child_process"
 * Call examples:
 * 
 *  >> node ./install-local.mjs 
-*  >> node ./install-local.mjs --deployWDelegation
+*  >> node ./install-local.mjs --setDelegatedForTest
 *
 *  Note:
 *  Currently in this script the other Secp256k1KeyIdentity the nns-ledger is initialized sending
@@ -53,15 +53,14 @@ try {
         throw new Error(error)
     }
 }
+await $`dfx deploy invoice`
 
-if (argv.deployWDelegation) {
-// the principal "jg6qm-uw64t-m6ppo-oluwn-ogr5j-dc5pm-lgy2p-eh6px-hebcd-5v73i-nqe" is that of the Ed25519KeyIdentity 
-// the nns-ledger is initiallized sending ~10000000 ICP to it; is also used as the delegated adminstrator in E2E tests who 
-// besides the original deployer of the canister has the power to add and remove principals from the allowed creators list 
-    console.info(chalk.bgBlue("\ndeploying invoice canister with delegated administrator\n"))
-    await $`dfx deploy invoice --argument '( opt principal"jg6qm-uw64t-m6ppo-oluwn-ogr5j-dc5pm-lgy2p-eh6px-hebcd-5v73i-nqe" )'`
-} else {
-    await $`dfx deploy invoice`
+if (argv.setDelegatedForTest) {
+    console.info(chalk.bgBlue("\nsetting invoice canister delegated administrator as nns-ledger initialized funded identity\n"))
+    await $`dfx canister call invoice set_delegated_administrator '( record { who = principal"jg6qm-uw64t-m6ppo-oluwn-ogr5j-dc5pm-lgy2p-eh6px-hebcd-5v73i-nqe" } )'`
+    // the principal "jg6qm-uw64t-m6ppo-oluwn-ogr5j-dc5pm-lgy2p-eh6px-hebcd-5v73i-nqe" is that of the Ed25519KeyIdentity 
+    // the nns-ledger is initiallized sending ~10000000 ICP to it; is also used as the delegated adminstrator in E2E tests who 
+    // besides the original deployer of the canister has the power to add and remove principals from the allowed creators list 
 }
 
 // todo // todo // todo // todo // todo // todo // todo // todo // todo // todo // todo // todo // todo move these into pretest

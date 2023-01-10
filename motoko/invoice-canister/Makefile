@@ -19,7 +19,7 @@ clean:
 
 e2e:
 	npm ci
-	node ./install-local.mjs --deployWDelegation
+	node ./install-local.mjs --setDelegatedForTest
 	npm test
 
 watch:
