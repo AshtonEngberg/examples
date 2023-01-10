@@ -219,6 +219,35 @@ module {
   };
 // #endregion
 
+// #region set delegated administrator args results
+  public type SetDelegatedAdministratorArgs = {
+    who : Principal
+  };
+  public type SetDelegatedAdministratorResult = Result.Result<SetDelegatedAdministratorSuccess, SetDelegatedAdministratorErr>;
+  public type SetDelegatedAdministratorSuccess = {
+    message : Text;
+  };
+  public type SetDelegatedAdministratorErr = {
+    message : ?Text;
+    kind : {
+      #NotAuthorized;
+      #AnonymousIneligible;
+    }
+  };
+// #endregion
+// #region get delegated administrator results
+  public type GetDelegatedAdministratorResult = Result.Result<GetDelegatedAdministratorSuccess, GetDelegatedAdministratorErr>;
+  public type GetDelegatedAdministratorSuccess = {
+    delegatedAdmin : Principal;
+  };
+  public type GetDelegatedAdministratorErr = {
+    kind : {
+      #NotAuthorized;
+    }
+  };
+// #endregion
+
+
 // #region ICP Transfer -> Note not used. 
   public type Memo = Nat64;
   public type SubAccount = Blob;

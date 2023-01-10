@@ -15,8 +15,7 @@ import Text "mo:base/Text";
 import Time "mo:base/Time";
 import Result "mo:base/Result";
 
-//dfx deploy invoice --argument '( opt principal"jg6qm-uw64t-m6ppo-oluwn-ogr5j-dc5pm-lgy2p-eh6px-hebcd-5v73i-nqe"  )'
-shared ({ caller = installer_ }) actor class Invoice(delegatedAdminstrator : ?Principal) = this {
+shared ({ caller = installer_ }) actor class Invoice() = this {
     
   // #region Types
   type Details = T.Details;
@@ -47,8 +46,8 @@ shared ({ caller = installer_ }) actor class Invoice(delegatedAdminstrator : ?Pr
   entries := [];
 
   stable var creatorsAllowedList: [Principal] = [];
-  // if specified when deployed also has the ability to add/remove from creators allow list
-  let delegatedAdmin_ : Principal = Option.get(delegatedAdminstrator, installer_);
+  // when set otherwise also has the authority to add/remove from creators allowed list 
+  stable var delegatedAdmin_ : Principal = installer_;
 
   // Magic Numbers
   let SMALL_CONTENT_SIZE = 256;
@@ -130,7 +129,39 @@ shared ({ caller = installer_ }) actor class Invoice(delegatedAdminstrator : ?Pr
     };
   };
   // #endregion 
-  
+
+  // #region get_allowed_creators_list
+  public shared ({ caller }) func set_delegated_administrator(args : T.SetDelegatedAdministratorArgs) : async T.SetDelegatedAdministratorResult {
+    if (caller == installer_ or caller == delegatedAdmin_) {
+      let who = args.who;
+      if (not Principal.isAnonymous(who)) {
+        delegatedAdmin_ := who;
+        return #ok({
+          message = ("Principal " # Principal.toText(who) # " set as the delegated administrator.");
+        });
+      } else {
+        return #err({
+          message = ?"The anonymous caller is not elgible to be the delegated administrator.";
+          kind = #AnonymousIneligible;
+        });
+      }
+    } else {
+      return #err({
+        message = ?"Not authorized ";
+        kind = #NotAuthorized;
+      });
+    }
+  };
+  // #endregion
+
+  public shared ({ caller }) func get_delegated_administrator() : async T.GetDelegatedAdministratorResult {
+    if (caller == installer_ or caller == delegatedAdmin_) {
+      return #ok({ delegatedAdmin = delegatedAdmin_ });
+    } else {
+      return #err({ kind = #NotAuthorized });
+    }
+  };
+
   // #region hasPermissionToCreate 
   func hasPermissionToCreate(who: Principal) : Bool {
     (installer_ == who or delegatedAdmin_ == who) or Option.isSome(
