@@ -22,8 +22,10 @@ this is for personal use in case changes have to be redone manually, points aren
 
 //The above marks all changes necessary for the existing PR to be finished. The rest is all of the edits to complete the RFP-BNT-2 bounty. 
 
-! for the bounty itself 
-  SEC-F12 (complete with all working tests @ commit 6f77272e365e228e3bcc023f0b4cbb896220286e)
+! for the bounty itself
+|------------------------------------------------------------------------------------------------------------|  
+  SEC-F12 
+  ☑️(complete with all working tests @ commit 6f77272e365e228e3bcc023f0b4cbb896220286e)
     ☀ update pack-set.dhall to include aviate labs' ICOS (Internet Computer Open Services) so both the official dfinity and ICOS package sets are included (from ICOS array, crypto, encoding, hash, and principal as added dependencies)
     ☀ update vessel.dhall to reflect this ie: [ "base", "matchers", "base-0.7.3", "array", "crypto", "hash", "encoding", "principal" ]
     ☀ add new module with equivalent ICP related utility functions for account identifiers and subaccounts
@@ -65,7 +67,9 @@ this is for personal use in case changes have to be redone manually, points aren
       - all transfer calls to use destinationAddress field instead of destination record (resetBalance, invalid account, increase a callers balance, should not more than)
       - "fetch different principals", "should increase a callers icp balance" -> to use get_callers_consolidation_address 
       - "mark an invoice verified -> transfer call to use destinationaddress with invoice?.paymentAddress 
-  SEC-F20 (complete and all working tests @ commit hash 2f697db8d71be6198dee4735acf6dee8394098b2)
+|------------------------------------------------------------------------------------------------------------| 
+  SEC-F20 
+  ☑️(complete and all working tests @ commit hash 2f697db8d71be6198dee4735acf6dee8394098b2)
     ☀ update Types to include get_allowed_creators_list, add_allowed_creator, remove_allowed_creator and corresponding Args/Results, also add NotAuthorized to create_invoice error kind
     ☀ update main.mo
       -convert actor declaration to explicit class to get _installer and have arg of ?Principal for delegatedAdmin 
@@ -85,13 +89,21 @@ this is for personal use in case changes have to be redone manually, points aren
         * add test for checking unauthorized callers can't create invoices 
       - update icp.test.js to add beforeall to make sure defaultActor has permission to create and edit which it tests' titles to designate it is of invoice's  permission 
       - update maxCapacity.js to include check for maxing out creators invoice list capacity 
-  "refactor permission checks to a method" (subtask of invoice canister cleanup, complete and all working tests @ commit hash c335513c0cc0e3121ddccbfcac1cb09924e95fa2)
+|------------------------------------------------------------------------------------------------------------| 
+  "refactor permission checks to a method" (subtask of invoice canister cleanup, 
+  ☑️(complete and all working tests @ commit hash c335513c0cc0e3121ddccbfcac1cb09924e95fa2)
     ☀ encapsulate per invoice permission checks to a method (added private variant to specifically use for this private utility method)
-  SEC-F27 principalToSubaccount-needs-domain-separator 
+|------------------------------------------------------------------------------------------------------------| 
+  SEC-F27 principalToSubaccount-needs-domain-separator  
+  ☑️(complete and all working tests @ commit hash f854426d463fbc9c3bee56c5fdd0dabb7c100571)
     ☀ uncomment code from SEC-F12, update addresses in unit test (1), e2e icp (2) and install script (for balance holder)
+|------------------------------------------------------------------------------------------------------------| 
   Issue-35 insufficient transfer amount to cover fee 
+  ☑️(complete and all working tests @ commit hash e70ad2349640697ecb5b2dd42707e08afc26355e)
     ☀ add < and new InsufficientTransferAmount error kind to return for transfer 
+|------------------------------------------------------------------------------------------------------------| 
   SEC-F21 disallow anonymous principal 
+  ☑️(complete and all working tests @ commit hash 9faa01741c5488cc7bafd030e5c74050386ca2fd)
     ☀ convert delegatedAdmin to var with getter/setter instead of as a let field set by class constructor arg 
     ☀ add anti-anon check to beginning of get_allowed_creators_list, add_allowed_creator, remove_allowed_creator, get_balance, get_callers_consolidation_address, verify_invoice transfer (create_invoice already checks)
     ☀ add test suites to verify above (delegatedAdmin, disallowAnon)

@@ -42,8 +42,8 @@ This was created to make it easier for someone to quickly verify everything has 
     - Return an error if the requested transfer amount from a principal subaccount is less than the transfer fee 
         ☑️ check
 }
-{
-    ✶ SEC Cleanup 
+{ 
+    ✶ SEC Cleanup         secf30 refunds, secf17 uncertified queries, secf05 overwriting itself verify
     | Issue 29 
     https://github.com/dfinity/invoice-canister/issues/29
 
@@ -85,15 +85,15 @@ This was created to make it easier for someone to quickly verify everything has 
     https://github.com/dfinity/invoice-canister/issues/25
 
     - "disallow the anonymous principal" 
-        to do ☑️
+        ☑️ check
 }
-{
+{ 
     ✶ SEC-F05 TOCTOU in verify_invoice   
     | Issue 21
     https://github.com/dfinity/invoice-canister/issues/21
 
     - Verification of an invoice should be prevented from overwriting itself in case verification is called while verification is happening
-        to do ☑️
+        to do ☑️ 
 }
 {
     ✶ SEC-F12 Copied libraries 
@@ -119,15 +119,15 @@ This was created to make it easier for someone to quickly verify everything has 
     https://github.com/dfinity/invoice-canister/issues/16
 
     - get_invoice, get_account_identifier, get_balance are query calls and should be update calls or explicitly stated they are risk vectors in documentation
-        to do ☑️
+        to do ☑️  
 }
-{
+{ 
     ✶ SEC-F30 Funds can get stuck in invoice accounts
     | Issue 13 
     https://github.com/dfinity/invoice-canister/issues/13
 
     - To recover funds sent to an address controlled by the invoice canister that are not processed by the normal invoice lifecycle, there needs to be a means of recovering or handling these funds
-        to do ☑️
+        to do ☑️  
 }
 {
     ✶ SEC-F20 Controller of canister could take all funds by upgrading
@@ -163,5 +163,9 @@ all to do
         ☑️
 }
 
-
-
+remaining: 
+    SEC-F30 Funds can get stuck in invoice accounts, 
+    SEC-F17 Uncertified Queries, 
+    SEC-F05 TOCTOU in verify_invoice, 
+    SEC Cleanup,
+    ICRC1
