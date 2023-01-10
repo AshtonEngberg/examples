@@ -37,9 +37,9 @@ const balanceHolderIdentity = parseIdentity(
 );
 
 const getNNSLedgerInitializedFundedEd25519KeyIdentity = () => {
-  // should have funds initialized in the nns-ledger
-  // has principal: jg6qm-uw64t-m6ppo-oluwn-ogr5j-dc5pm-lgy2p-eh6px-hebcd-5v73i-nqe
-  // has invoice default subaccount accountId: e157a3ffdd20d2551634a4bb42feb948b353221da411c191b62085eea314b4ee
+  // this identity corresponds to one of the two that have funds initialized in the nns-ledger by dfx nns install
+  // this one has the principal: jg6qm-uw64t-m6ppo-oluwn-ogr5j-dc5pm-lgy2p-eh6px-hebcd-5v73i-nqe
+  // has invoice consolidation address: 7c42b4906f4f605b2d4cdbf0f09c29e4825d59b6dc02dc3461849c3d482457ac
   // and has ICP default subaccount accountId: 5b315d2f6702cb3a27d826161797d7b2c2e131cd312aece51d4d5574d1247087
   const publicKey = "Uu8wv55BKmk9ZErr6OIt5XR1kpEGXcOSOC1OYzrAwuk=";
   const privateKey ="N3HB8Hh2PrWqhWH2Qqgr1vbU9T3gb1zgdBD8ZOdlQnVS7zC/nkEqaT1kSuvo4i3ldHWSkQZdw5I4LU5jOsDC6Q==";
@@ -67,6 +67,7 @@ module.exports = {
   defaultIdentity,
   balanceHolder,
   balanceHolderIdentity,
+  delegatedAdminIdentity,
   delegatedAdministrator,
   anonymousActor,
   getRandomActor,
