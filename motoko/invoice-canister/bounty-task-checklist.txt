@@ -138,6 +138,9 @@ This was created to make it easier for someone to quickly verify everything has 
         ( The context of this issue was as if the invoice canister would become applied for use by a DAO, however that's a project in itself. To prepare for such a possibility, more access control could be introduced: admin level role who can add and remove principals from invoice creation allow list, as well as move funds from any subaccount, and a consolidation account role, which currently will be mapping invoices to their creators so they can only move funds from their own accounts)
         ☑️ done
 }
+//
+Verify examples/motoko-seller-client up to date and working
+//
 {
     ✶ Support for the ICRC-1 fungible token standard
 all to do 
