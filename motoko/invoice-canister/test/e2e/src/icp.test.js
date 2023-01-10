@@ -183,18 +183,6 @@ describe("ICP Tests", () => {
         message: ["You do not have permission to verify this invoice"],
       });
     });
-    it("should not allow a caller to verify an invoice if they are not the creator or on the invoice's permission verify allowlist", async () => {
-      const invoice = await defaultActor.create_invoice(testInvoice);
-      const result = await balanceHolder.verify_invoice({
-        id: invoice.ok.invoice.id,
-      });
-      expect(result.err).toStrictEqual({
-        kind: {
-          NotAuthorized: null,
-        },
-        message: ["You do not have permission to verify this invoice"],
-      });
-    });
     it("should allow a non-creator caller to verify an invoice if they are on the invoice's permission verify allowlist", async () => {
       const invoice = await defaultActor.create_invoice({
         ...testInvoice,
