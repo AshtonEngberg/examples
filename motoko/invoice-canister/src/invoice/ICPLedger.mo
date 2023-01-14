@@ -142,7 +142,6 @@ module {
 
   public type ICPVerifyInvoiceArgs = {
     invoice : T.Invoice;
-    caller : Principal;
     canisterId : Principal;
   };
 

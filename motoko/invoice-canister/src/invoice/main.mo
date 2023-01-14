@@ -356,7 +356,6 @@ shared ({ caller = installer_ }) actor class Invoice() = this {
           case "ICP" {
             let result : T.VerifyInvoiceResult = await ICP.verifyInvoice({
               invoice = i;
-              caller;
               canisterId = getInvoiceCanisterPrinciple();
             });
             switch result {
