@@ -48,7 +48,7 @@ This was created to make it easier for someone to quickly verify everything has 
     https://github.com/dfinity/invoice-canister/issues/29
 
     - "redundant argument in verify_invoice: The caller is no longer needed in ICPVerifyInvoiceArgs..."
-        to do ☑️       
+        ☑️ check       
     - "In verify_invoice the from_subaccount is re-computed. Would it be better to..."
         ☑️ not necessary? would be redundant since subaccount is easily computed from id and creator which is immutable in invoice itself      
     - "verify_invoice still has a TODO that should be removed."
